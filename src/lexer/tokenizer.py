@@ -1,11 +1,10 @@
-```python
-import enum
+from enum import Enum
 from typing import List, Tuple
 
-class TokenType(enum.Enum):
+class TokenType(Enum):
     """Token types for the Nexus Programming Language"""
-    KEYWORD = 1
-    IDENTIFIER = 2
+    IDENTIFIER = 1
+    KEYWORD = 2
     INTEGER_LITERAL = 3
     FLOAT_LITERAL = 4
     STRING_LITERAL = 5
@@ -14,7 +13,7 @@ class TokenType(enum.Enum):
     EOF = 8
 
 class Token:
-    """Represents a single token in the source code"""
+    """Represents a single token in the Nexus Programming Language"""
     def __init__(self, token_type: TokenType, value: str, line: int, column: int):
         self.token_type = token_type
         self.value = value
@@ -25,7 +24,7 @@ class Token:
         return f"Token({self.token_type}, {self.value}, {self.line}, {self.column})"
 
 class Tokenizer:
-    """Responsible for breaking the source code into individual tokens"""
+    """Tokenizes the input source code into a list of tokens"""
     def __init__(self, source_code: str):
         self.source_code = source_code
         self.position = 0
@@ -33,110 +32,107 @@ class Tokenizer:
         self.column = 1
 
     def tokenize(self) -> List[Token]:
-        """Tokenize the entire source code"""
+        """Tokenizes the input source code into a list of tokens"""
         tokens = []
         while self.position < len(self.source_code):
             char = self.source_code[self.position]
             if char.isspace():
-                self._consume_whitespace()
-            elif char.isdigit() or char == '.':
-                token = self._consume_number_literal()
+                self.skip_whitespace()
+            elif char.isalpha():
+                token = self.tokenize_identifier()
                 tokens.append(token)
-            elif char.isalpha() or char == '_':
-                token = self._consume_identifier()
+            elif char.isdigit():
+                token = self.tokenize_integer_literal()
                 tokens.append(token)
             elif char == '"':
-                token = self._consume_string_literal()
+                token = self.tokenize_string_literal()
                 tokens.append(token)
-            elif char in '+-*/%<>!=&|':
-                token = self._consume_operator()
+            elif char in "+-*/%<>!=&|":
+                token = self.tokenize_operator()
                 tokens.append(token)
-            elif char in '(){}[];,':
-                token = self._consume_symbol()
+            elif char in ",;(){}[]":
+                token = self.tokenize_symbol()
                 tokens.append(token)
             else:
                 raise SyntaxError(f"Invalid character '{char}' at line {self.line}, column {self.column}")
         tokens.append(Token(TokenType.EOF, "", self.line, self.column))
         return tokens
 
-    def _consume_whitespace(self):
-        """Consume whitespace characters"""
+    def skip_whitespace(self):
+        """Skips whitespace characters in the source code"""
         while self.position < len(self.source_code) and self.source_code[self.position].isspace():
-            if self.source_code[self.position] == '\n':
+            if self.source_code[self.position] == "\n":
                 self.line += 1
                 self.column = 1
             else:
                 self.column += 1
             self.position += 1
 
-    def _consume_number_literal(self) -> Token:
-        """Consume a number literal (integer or float)"""
+    def tokenize_identifier(self) -> Token:
+        """Tokenizes an identifier in the source code"""
         start_position = self.position
-        has_decimal = False
-        while self.position < len(self.source_code) and (self.source_code[self.position].isdigit() or self.source_code[self.position] == '.'):
-            if self.source_code[self.position] == '.':
-                if has_decimal:
-                    raise SyntaxError(f"Invalid number literal at line {self.line}, column {self.column}")
-                has_decimal = True
+        while self.position < len(self.source_code) and self.source_code[self.position].isalnum():
             self.position += 1
+            self.column += 1
         value = self.source_code[start_position:self.position]
-        if '.' in value:
-            token_type = TokenType.FLOAT_LITERAL
-        else:
-            token_type = TokenType.INTEGER_LITERAL
-        return Token(token_type, value, self.line, self.column - len(value))
-
-    def _consume_identifier(self) -> Token:
-        """Consume an identifier (variable or keyword)"""
-        start_position = self.position
-        while self.position < len(self.source_code) and (self.source_code[self.position].isalpha() or self.source_code[self.position].isdigit() or self.source_code[self.position] == '_'):
-            self.position += 1
-        value = self.source_code[start_position:self.position]
-        if value in ['if', 'else', 'while', 'for', 'func', 'return']:
+        if value in ["let", "const", "fn", "if", "else", "while", "for"]:
             token_type = TokenType.KEYWORD
         else:
             token_type = TokenType.IDENTIFIER
         return Token(token_type, value, self.line, self.column - len(value))
 
-    def _consume_string_literal(self) -> Token:
-        """Consume a string literal"""
+    def tokenize_integer_literal(self) -> Token:
+        """Tokenizes an integer literal in the source code"""
         start_position = self.position
-        self.position += 1  # Consume the opening quote
+        while self.position < len(self.source_code) and self.source_code[self.position].isdigit():
+            self.position += 1
+            self.column += 1
+        value = self.source_code[start_position:self.position]
+        return Token(TokenType.INTEGER_LITERAL, value, self.line, self.column - len(value))
+
+    def tokenize_string_literal(self) -> Token:
+        """Tokenizes a string literal in the source code"""
+        start_position = self.position + 1
+        self.position += 1
+        self.column += 1
         while self.position < len(self.source_code) and self.source_code[self.position] != '"':
-            if self.source_code[self.position] == '\n':
-                raise SyntaxError(f"Unterminated string literal at line {self.line}, column {self.column}")
+            if self.source_code[self.position] == "\n":
+                self.line += 1
+                self.column = 1
+            else:
+                self.column += 1
             self.position += 1
         if self.position >= len(self.source_code):
-            raise SyntaxError(f"Unterminated string literal at line {self.line}, column {self.column}")
-        self.position += 1  # Consume the closing quote
-        value = self.source_code[start_position + 1:self.position - 1]
+            raise SyntaxError("Unterminated string literal")
+        value = self.source_code[start_position:self.position]
+        self.position += 1
+        self.column += 1
         return Token(TokenType.STRING_LITERAL, value, self.line, self.column - len(value) - 2)
 
-    def _consume_operator(self) -> Token:
-        """Consume an operator"""
-        start_position = self.position
+    def tokenize_operator(self) -> Token:
+        """Tokenizes an operator in the source code"""
+        value = self.source_code[self.position]
         self.position += 1
-        value = self.source_code[start_position:self.position]
-        return Token(TokenType.OPERATOR, value, self.line, self.column - len(value))
+        self.column += 1
+        return Token(TokenType.OPERATOR, value, self.line, self.column - 1)
 
-    def _consume_symbol(self) -> Token:
-        """Consume a symbol (parenthesis, bracket, etc.)"""
-        start_position = self.position
+    def tokenize_symbol(self) -> Token:
+        """Tokenizes a symbol in the source code"""
+        value = self.source_code[self.position]
         self.position += 1
-        value = self.source_code[start_position:self.position]
-        return Token(TokenType.SYMBOL, value, self.line, self.column - len(value))
+        self.column += 1
+        return Token(TokenType.SYMBOL, value, self.line, self.column - 1)
 
-def main():
+# Example usage:
+if __name__ == "__main__":
     source_code = """
-    x = 5
-    y = 3.14
-    print("Hello, world!")
+    let x = 5;
+    const y = "hello";
+    fn add(a, b) {
+        return a + b;
+    }
     """
     tokenizer = Tokenizer(source_code)
     tokens = tokenizer.tokenize()
     for token in tokens:
         print(token)
-
-if __name__ == "__main__":
-    main()
-```
