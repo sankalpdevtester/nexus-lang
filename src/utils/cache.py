@@ -43,36 +43,38 @@ class Cache:
 
     def delete(self, key: str) -> None:
         """
-        Delete a value from the cache.
+        Delete a key from the cache.
 
         Args:
-        key (str): The key to delete the value for.
+        key (str): The key to delete.
         """
         if key in self.cache:
             del self.cache[key]
 
     def clear(self) -> None:
         """
-        Clear all values from the cache.
+        Clear the entire cache.
         """
         self.cache.clear()
 
 
-def get_cache() -> Cache:
+def create_cache(ttl: int = 60) -> Cache:
     """
-    Get the global cache instance.
+    Create a new cache instance with the given TTL.
+
+    Args:
+    ttl (int): The time-to-live value in seconds. Defaults to 60.
 
     Returns:
-    Cache: The global cache instance.
+    Cache: A new cache instance.
     """
-    cache = Cache()
-    return cache
+    return Cache(ttl)
 
 
 # Example usage:
 if __name__ == "__main__":
-    cache = get_cache()
+    cache = create_cache(ttl=30)
     cache.set("example_key", "example_value")
     print(cache.get("example_key"))  # Output: example_value
-    cache.delete("example_key")
+    time.sleep(31)
     print(cache.get("example_key"))  # Output: None
