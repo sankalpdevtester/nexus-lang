@@ -4,10 +4,10 @@ from typing import Any, Dict
 class Cache:
     def __init__(self, ttl: int = 60):
         """
-        Initialize the cache with a time-to-live (TTL) value.
+        Initialize the cache with a time-to-live (TTL) in seconds.
 
         Args:
-        ttl (int): The time-to-live value in seconds. Defaults to 60.
+        ttl (int): The time-to-live in seconds. Defaults to 60.
         """
         self.cache: Dict[str, Any] = {}
         self.ttl = ttl
@@ -17,10 +17,10 @@ class Cache:
         Get a value from the cache.
 
         Args:
-        key (str): The key to retrieve the value for.
+        key (str): The key to retrieve.
 
         Returns:
-        Any: The cached value if it exists and is not expired, otherwise None.
+        Any: The cached value or None if not found or expired.
         """
         if key in self.cache:
             value, expiry = self.cache[key]
@@ -35,7 +35,7 @@ class Cache:
         Set a value in the cache.
 
         Args:
-        key (str): The key to store the value under.
+        key (str): The key to store.
         value (Any): The value to store.
         """
         expiry = time.time() + self.ttl
@@ -60,10 +60,10 @@ class Cache:
 
 def create_cache(ttl: int = 60) -> Cache:
     """
-    Create a new cache instance with the given TTL.
+    Create a new cache instance.
 
     Args:
-    ttl (int): The time-to-live value in seconds. Defaults to 60.
+    ttl (int): The time-to-live in seconds. Defaults to 60.
 
     Returns:
     Cache: A new cache instance.
