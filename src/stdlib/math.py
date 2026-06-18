@@ -1,124 +1,122 @@
 import math
 
-def add(a, b):
+def sin(x):
     """
-    Adds two numbers together.
-
+    Compute the sine of x.
+    
     Args:
-        a (float): The first number.
-        b (float): The second number.
-
+        x (float): The input angle in radians.
+    
     Returns:
-        float: The sum of a and b.
+        float: The sine of x.
     """
-    return a + b
+    return math.sin(x)
 
-def subtract(a, b):
+def cos(x):
     """
-    Subtracts one number from another.
-
+    Compute the cosine of x.
+    
     Args:
-        a (float): The first number.
-        b (float): The second number.
-
+        x (float): The input angle in radians.
+    
     Returns:
-        float: The difference between a and b.
+        float: The cosine of x.
     """
-    return a - b
+    return math.cos(x)
 
-def multiply(a, b):
+def tan(x):
     """
-    Multiplies two numbers together.
-
+    Compute the tangent of x.
+    
     Args:
-        a (float): The first number.
-        b (float): The second number.
-
+        x (float): The input angle in radians.
+    
     Returns:
-        float: The product of a and b.
+        float: The tangent of x.
     """
-    return a * b
+    return math.tan(x)
 
-def divide(a, b):
+def sqrt(x):
     """
-    Divides one number by another.
-
+    Compute the square root of x.
+    
     Args:
-        a (float): The dividend.
-        b (float): The divisor.
-
+        x (float): The input number.
+    
     Returns:
-        float: The quotient of a and b.
-
-    Raises:
-        ZeroDivisionError: If b is zero.
+        float: The square root of x.
     """
-    if b == 0:
-        raise ZeroDivisionError("Cannot divide by zero")
-    return a / b
+    return math.sqrt(x)
 
-def power(a, b):
+def pow(x, y):
     """
-    Raises one number to the power of another.
-
+    Compute x to the power of y.
+    
     Args:
-        a (float): The base.
-        b (float): The exponent.
-
+        x (float): The base number.
+        y (float): The exponent.
+    
     Returns:
-        float: The result of a raised to the power of b.
+        float: x to the power of y.
     """
-    return a ** b
+    return math.pow(x, y)
 
-def sqrt(a):
+def log(x):
     """
-    Calculates the square root of a number.
-
+    Compute the natural logarithm of x.
+    
     Args:
-        a (float): The number.
-
+        x (float): The input number.
+    
     Returns:
-        float: The square root of a.
-
-    Raises:
-        ValueError: If a is negative.
+        float: The natural logarithm of x.
     """
-    if a < 0:
-        raise ValueError("Cannot calculate square root of negative number")
-    return math.sqrt(a)
+    return math.log(x)
 
-def sin(a):
+def exp(x):
     """
-    Calculates the sine of an angle in radians.
-
+    Compute the exponential of x.
+    
     Args:
-        a (float): The angle in radians.
-
+        x (float): The input number.
+    
     Returns:
-        float: The sine of a.
+        float: The exponential of x.
     """
-    return math.sin(a)
+    return math.exp(x)
 
-def cos(a):
+def abs(x):
     """
-    Calculates the cosine of an angle in radians.
-
+    Compute the absolute value of x.
+    
     Args:
-        a (float): The angle in radians.
-
+        x (float): The input number.
+    
     Returns:
-        float: The cosine of a.
+        float: The absolute value of x.
     """
-    return math.cos(a)
+    return abs(x)
 
-def tan(a):
+def max(*args):
     """
-    Calculates the tangent of an angle in radians.
-
+    Compute the maximum of the input numbers.
+    
     Args:
-        a (float): The angle in radians.
-
+        *args (float): The input numbers.
+    
     Returns:
-        float: The tangent of a.
+        float: The maximum of the input numbers.
     """
-    return math.tan(a)
+    return max(*args)
+
+def min(*args):
+    """
+    Compute the minimum of the input numbers.
+    
+    Args:
+        *args (float): The input numbers.
+    
+    Returns:
+        float: The minimum of the input numbers.
+    """
+    return min(*args)
