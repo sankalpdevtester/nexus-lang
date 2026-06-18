@@ -1,23 +1,23 @@
 def length(lst):
     """
-    Returns the length of a list.
-
+    Compute the length of the input list.
+    
     Args:
-        lst (list): The list.
-
+        lst (list): The input list.
+    
     Returns:
-        int: The length of the list.
+        int: The length of the input list.
     """
     return len(lst)
 
 def append(lst, item):
     """
-    Appends an item to the end of a list.
-
+    Append an item to the input list.
+    
     Args:
-        lst (list): The list.
+        lst (list): The input list.
         item: The item to append.
-
+    
     Returns:
         list: The modified list.
     """
@@ -26,13 +26,13 @@ def append(lst, item):
 
 def insert(lst, index, item):
     """
-    Inserts an item at a specific index in a list.
-
+    Insert an item at the specified index in the input list.
+    
     Args:
-        lst (list): The list.
+        lst (list): The input list.
         index (int): The index to insert at.
         item: The item to insert.
-
+    
     Returns:
         list: The modified list.
     """
@@ -41,52 +41,54 @@ def insert(lst, index, item):
 
 def remove(lst, item):
     """
-    Removes the first occurrence of an item in a list.
-
+    Remove the first occurrence of the specified item in the input list.
+    
     Args:
-        lst (list): The list.
+        lst (list): The input list.
         item: The item to remove.
-
+    
     Returns:
         list: The modified list.
-
-    Raises:
-        ValueError: If the item is not found in the list.
     """
-    if item not in lst:
-        raise ValueError("Item not found in list")
     lst.remove(item)
     return lst
 
-def index_of(lst, item):
+def sort(lst):
     """
-    Returns the index of the first occurrence of an item in a list.
-
+    Sort the input list in ascending order.
+    
     Args:
-        lst (list): The list.
-        item: The item to find.
-
+        lst (list): The input list.
+    
     Returns:
-        int: The index of the item.
+        list: The sorted list.
+    """
+    return sorted(lst)
 
-    Raises:
-        ValueError: If the item is not found in the list.
+def reverse(lst):
+    """
+    Reverse the input list.
+    
+    Args:
+        lst (list): The input list.
+    
+    Returns:
+        list: The reversed list.
+    """
+    return lst[::-1]
+
+def index(lst, item):
+    """
+    Find the index of the first occurrence of the specified item in the input list.
+    
+    Args:
+        lst (list): The input list.
+        item: The item to find.
+    
+    Returns:
+        int: The index of the item if found, -1 otherwise.
     """
     try:
         return lst.index(item)
     except ValueError:
-        raise ValueError("Item not found in list")
-
-def slice(lst, start, end):
-    """
-    Returns a slice of a list.
-
-    Args:
-        lst (list): The list.
-        start (int): The start index.
-        end (int): The end index.
-
-    Returns:
-        list: The slice of the list.
-    """
-    return lst[start:end]
+        return -1
