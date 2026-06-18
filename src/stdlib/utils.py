@@ -2,8 +2,8 @@ import time
 
 def now():
     """
-    Returns the current time in seconds since the epoch.
-
+    Get the current time in seconds since the epoch.
+    
     Returns:
         float: The current time.
     """
@@ -11,34 +11,57 @@ def now():
 
 def sleep(seconds):
     """
-    Pauses execution for a specified amount of time.
-
+    Pause execution for the specified number of seconds.
+    
     Args:
-        seconds (float): The amount of time to sleep.
+        seconds (float): The number of seconds to sleep.
     """
     time.sleep(seconds)
 
-def type_of(obj):
+def type_of(x):
     """
-    Returns the type of an object.
-
+    Get the type of the input value.
+    
     Args:
-        obj: The object.
-
+        x: The input value.
+    
     Returns:
-        str: The type of the object.
+        str: The type of the input value.
     """
-    return type(obj).__name__
+    return type(x).__name__
 
-def is_instance_of(obj, type_):
+def is_number(x):
     """
-    Checks if an object is an instance of a specific type.
-
+    Check if the input value is a number.
+    
     Args:
-        obj: The object.
-        type_: The type to check.
-
+        x: The input value.
+    
     Returns:
-        bool: True if the object is an instance of the type, False otherwise.
+        bool: True if the input value is a number, False otherwise.
     """
-    return isinstance(obj, type_)
+    return isinstance(x, (int, float))
+
+def is_string(x):
+    """
+    Check if the input value is a string.
+    
+    Args:
+        x: The input value.
+    
+    Returns:
+        bool: True if the input value is a string, False otherwise.
+    """
+    return isinstance(x, str)
+
+def is_list(x):
+    """
+    Check if the input value is a list.
+    
+    Args:
+        x: The input value.
+    
+    Returns:
+        bool: True if the input value is a list, False otherwise.
+    """
+    return isinstance(x, list)
