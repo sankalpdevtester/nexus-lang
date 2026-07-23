@@ -7,28 +7,27 @@ class Cache:
         Initialize the cache with a time-to-live (TTL) in seconds.
 
         Args:
-        ttl (int): The time-to-live for cache entries in seconds. Defaults to 60.
+        ttl (int): The time-to-live in seconds. Defaults to 60.
         """
-        self.ttl = ttl
         self.cache: Dict[str, Any] = {}
-        self.expiration_times: Dict[str, float] = {}
+        self.ttl = ttl
 
     def get(self, key: str) -> Any:
         """
         Get a value from the cache.
 
         Args:
-        key (str): The key to retrieve from the cache.
+        key (str): The key to retrieve.
 
         Returns:
-        Any: The cached value if it exists and has not expired, otherwise None.
+        Any: The cached value or None if not found or expired.
         """
         if key in self.cache:
-            if time.time() < self.expiration_times[key]:
-                return self.cache[key]
+            value, expires = self.cache[key]
+            if time.time() < expires:
+                return value
             else:
                 del self.cache[key]
-                del self.expiration_times[key]
         return None
 
     def set(self, key: str, value: Any) -> None:
@@ -36,44 +35,41 @@ class Cache:
         Set a value in the cache.
 
         Args:
-        key (str): The key to store in the cache.
-        value (Any): The value to store in the cache.
+        key (str): The key to set.
+        value (Any): The value to cache.
         """
-        self.cache[key] = value
-        self.expiration_times[key] = time.time() + self.ttl
+        expires = time.time() + self.ttl
+        self.cache[key] = (value, expires)
 
     def delete(self, key: str) -> None:
         """
         Delete a key from the cache.
 
         Args:
-        key (str): The key to delete from the cache.
+        key (str): The key to delete.
         """
         if key in self.cache:
             del self.cache[key]
-            del self.expiration_times[key]
 
     def clear(self) -> None:
         """
-        Clear all entries from the cache.
+        Clear the entire cache.
         """
         self.cache.clear()
-        self.expiration_times.clear()
 
 def get_cache() -> Cache:
     """
     Get a singleton instance of the cache.
 
     Returns:
-    Cache: The singleton cache instance.
+    Cache: The cache instance.
     """
-    if not hasattr(get_cache, 'instance'):
-        get_cache.instance = Cache()
-    return get_cache.instance
+    cache = Cache()
+    return cache
 
 # Example usage:
 cache = get_cache()
-cache.set('example_key', 'example_value')
-print(cache.get('example_key'))  # Output: example_value
+cache.set("example_key", "example_value")
+print(cache.get("example_key"))  # Output: example_value
 time.sleep(61)  # Wait for the TTL to expire
-print(cache.get('example_key'))  # Output: None
+print(cache.get("example_key"))  # Output: None
